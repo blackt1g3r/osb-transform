@@ -1,0 +1,39 @@
+{
+    "requestCodeExt": "TH21123121315961011",
+    "requestType": "033",
+    "channelType": 1,
+    "sourceOrgUnitId": "BA",
+    "sourceOrgUnitLevel": 1,
+    "sourceProvinceId": "esb",
+    "sourceDistrictId": "esb",
+    "sourceSubDistrictId": "esb",
+    "businessCode": "G2299",
+    "createduserName": "DEV_TEST",
+    "sourceType" : "",
+    "priority": 1,
+    "flagBlock": 1,
+    "comment": "1",
+    "filterGroups": [
+        {
+            "filterFields": [
+            	
+                {
+                    "filterField": "CITIZEN_PID",
+                    "filterOperator": "eq",
+                    "filterValue": "068194008217"
+                },
+                {
+                    "filterField": "FULL_NAME_SRCH",
+                    "filterOperator": "eq",
+                    "filterValue": "NGUYENTHIKHIEM"
+                },
+                {
+                    "filterField": "IDENTIFY_NUMBER",
+                    "filterOperator": "eq",
+                    "filterValue": "193003100"
+                }
+               
+            ]
+        }
+    ]
+}

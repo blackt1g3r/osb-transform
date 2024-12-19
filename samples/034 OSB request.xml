@@ -1,0 +1,18 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dan="http://dancuquocgia.bca">
+    <soapenv:Body>
+        <dan:RequestVerifyHHFamily>
+            <dan:MaYeuCau>001072048683202209131027148147041</dan:MaYeuCau>
+            <dan:MaDichVu>034</dan:MaDichVu>
+            <dan:MaCanBo></dan:MaCanBo>
+            <dan:SoDinhDanhChuHo>014172005785</dan:SoDinhDanhChuHo>
+            <dan:NgaySinhChuHo>19720720</dan:NgaySinhChuHo>
+            <dan:HoVaTenChuHo>NGUYENTHITHUYHONG</dan:HoVaTenChuHo>
+            <dan:ThongTinThanhVien>
+                <dan:SoDinhDanh>014172005785</dan:SoDinhDanh>
+            </dan:ThongTinThanhVien>
+            <dan:ThongTinThanhVien>
+                <dan:SoDinhDanh>036200012470</dan:SoDinhDanh>
+            </dan:ThongTinThanhVien>
+        </dan:RequestVerifyHHFamily>
+    </soapenv:Body>
+</soapenv:Envelope>

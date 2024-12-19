@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dan="http://dancuquocgia.bca">
+    <soapenv:Body>
+        <CreateRequestsResponse xmlns="http://dancuquocgia.bca" xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+            <correct>true</correct>
+            <message>014172005785: Yes, 036200012470: No</message>
+        </CreateRequestsResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

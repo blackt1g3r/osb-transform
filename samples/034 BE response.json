@@ -1,0 +1,10 @@
+{
+    "responseCode": "00",
+    "responseMessage": "Success",
+    "responseData": {
+        "citizenId": "068194008217",
+        "fullName": "NGUYEN THI KHIEM",
+        "identifyNumber": "123456789",
+        "status": "Active"
+    }
+}

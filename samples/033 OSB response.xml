@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header xmlns:dan="http://dancuquocgia.bca"/>
+    <soapenv:Body xmlns:dan="http://dancuquocgia.bca">
+        <ser:KetQuaXacThuc xmlns:ser="http://dancuquocgia.bca">
+            <ser:TonTai>true</ser:TonTai>
+        </ser:KetQuaXacThuc>
+    </soapenv:Body>
+</soapenv:Envelope>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header xmlns:dan="http://dancuquocgia.bca"/>
+    <soapenv:Body xmlns:dan="http://dancuquocgia.bca">
+        <ns1:CongdanCollection xmlns:ns1="http://www.mic.gov.vn/dancu/1.0">
+            <ns1:CongDan>
+                <ns1:SoDinhDanh>075092024489</ns1:SoDinhDanh>
+                <ns1:SoCMND>272274799</ns1:SoCMND>
+                <ns1:HoVaTen>
+                    <ns1:Ho/>
+                    <ns1:ChuDem/>
+                    <ns1:Ten>HUỲNH CHÍ HIẾU</ns1:Ten>
+                </ns1:HoVaTen>
+                <ns1:GioiTinh>1</ns1:GioiTinh>
+                <ns1:DanToc>06</ns1:DanToc>
+                <ns1:TonGiao>01</ns1:TonGiao>
+                <ns1:TinhTrangHonNhan>1</ns1:TinhTrangHonNhan>
+                <ns1:NhomMau>04</ns1:NhomMau>
+                <ns1:NgayThangNamSinh>
+                    <ns1:Nam>1992</ns1:Nam>
+                    <ns1:NgayThangNam>19920203</ns1:NgayThangNam>
+                </ns1:NgayThangNamSinh>
+                <ns1:NoiDangKyKhaiSinh>
+                    <ns1:MaTinhThanh>75</ns1:MaTinhThanh>
+                    <ns1:MaQuanHuyen>731</ns1:MaQuanHuyen>
+                    <ns1:MaPhuongXa>26377</ns1:MaPhuongXa>
+                    <ns1:ChiTiet>XÃ PHƯỚC TÂN, THÀNH PHỐ BIÊN HÒA, TỈNH ĐỒNG NAI</ns1:ChiTiet>
+                    <ns1:QuocGia>VN</ns1:QuocGia>
+                </ns1:NoiDangKyKhaiSinh>
+                <ns1:QuocTich>VN</ns1:QuocTich>
+                <ns1:QueQuan>
+                    <ns1:MaTinhThanh/>
+                    <ns1:MaQuanHuyen/>
+                    <ns1:MaPhuongXa/>
+                    <ns1:ChiTiet>TRUNG QUỐC</ns1:ChiTiet>
+                    <ns1:QuocGia>CN</ns1:QuocGia>
+                </ns1:QueQuan>
+                <ns1:ThuongTru>
+                    <ns1:MaTinhThanh>75</ns1:MaTinhThanh>
+                    <ns1:MaQuanHuyen>731</ns1:MaQuanHuyen>
+                    <ns1:MaPhuongXa>26377</ns1:MaPhuongXa>
+                    <ns1:ChiTiet>TỔ 21, ẤP HƯƠNG PHƯỚC</ns1:ChiTiet>
+                    <ns1:QuocGia>VN</ns1:QuocGia>
+                </ns1:ThuongTru>
+                <ns1:NoiOHienTai>
+                    <ns1:MaTinhThanh>75</ns1:MaTinhThanh>
+                    <ns1:MaQuanHuyen>731</ns1:MaQuanHuyen>
+                    <ns1:MaPhuongXa>26377</ns1:MaPhuongXa>
+                    <ns1:ChiTiet>TỔ 21, ẤP HƯƠNG PHƯỚC</ns1:ChiTiet>
+                    <ns1:QuocGia>VN</ns1:QuocGia>
+                </ns1:NoiOHienTai>
+                <ns1:Cha>
+                    <ns1:HoVaTen>HUỲNH TRUNG DĨ</ns1:HoVaTen>
+                    <ns1:QuocTich>VN</ns1:QuocTich>
+                    <ns1:SoDinhDanh/>
+                    <ns1:SoCMND>270228295</ns1:SoCMND>
+                </ns1:Cha>
+                <ns1:Me>
+                    <ns1:HoVaTen>NGUYỄN THỊ GIANG</ns1:HoVaTen>
+                    <ns1:QuocTich>VN</ns1:QuocTich>
+                    <ns1:SoDinhDanh/>
+                    <ns1:SoCMND>270978863</ns1:SoCMND>
+                </ns1:Me>
+                <ns1:VoChong>
+                    <ns1:HoVaTen/>
+                    <ns1:QuocTich/>
+                    <ns1:SoDinhDanh/>
+                    <ns1:SoCMND/>
+                </ns1:VoChong>
+                <ns1:NguoiDaiDien>
+                    <ns1:HoVaTen/>
+                    <ns1:QuocTich/>
+                    <ns1:SoDinhDanh/>
+                    <ns1:SoCMND/>
+                </ns1:NguoiDaiDien>
+                <ns1:ChuHo>
+                    <ns1:QuanHe>08</ns1:QuanHe>
+                    <ns1:SoDinhDanh/>
+                    <ns1:SoCMND>270228295</ns1:SoCMND>
+                    <ns1:HoVaTen>HUỲNH TRUNG DĨ</ns1:HoVaTen>
+                </ns1:ChuHo>
+                <ns1:SoSoHoKhau>26377-005781</ns1:SoSoHoKhau>
+            </ns1:CongDan>
+        </ns1:CongdanCollection>
+    </soapenv:Body>
+</soapenv:Envelope>

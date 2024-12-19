@@ -1,0 +1,14 @@
+<soapenv:Envelope xmlns:soapenv=
+"http://schemas.xmlsoap.org/soap/envelope/" xmlns:dan="http://dancuquocgia.bca">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <dan:XacThucThongTinCongDan xmlns:dan="http://dancuquocgia.bca">
+            <dan:MaYeuCau>06756756</dan:MaYeuCau>
+            <dan:MaDichVu>033</dan:MaDichVu>
+            <dan:MaCanBo>BTNMT_VDXP</dan:MaCanBo>
+            <dan:SoDinhDanh>077079000462</dan:SoDinhDanh>
+            <dan:SoCMND>273046167</dan:SoCMND>
+            <dan:HoVaTen>TANGHUYNHTU</dan:HoVaTen>
+        </dan:XacThucThongTinCongDan>
+    </soapenv:Body>
+</soapenv:Envelope>
