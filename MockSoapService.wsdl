@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="http://mock.pstmn.io/soap"
+    xmlns:req="http://mock.pstmn.io/soap/request"
+    xmlns:res="http://mock.pstmn.io/soap/response"
+    targetNamespace="http://mock.pstmn.io/soap"
+    name="MockSoapService">
+
+    <!-- Types Section -->
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://mock.pstmn.io/soap/request">
+            <xsd:element name="Request">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="requestCodeExt" type="xsd:string"/>
+                        <xsd:element name="requestType" type="xsd:string"/>
+                        <xsd:element name="channelType" type="xsd:integer"/>
+                        <xsd:element name="sourceOrgUnitId" type="xsd:string"/>
+                        <xsd:element name="createdUns1Name" type="xsd:string"/>
+                        <xsd:element name="sourceOrgUnitLevel" type="xsd:integer"/>
+                        <xsd:element name="sourceProvinceId" type="xsd:string"/>
+                        <xsd:element name="sourceDistrictId" type="xsd:string"/>
+                        <xsd:element name="sourceSubDistrictId" type="xsd:string"/>
+                        <xsd:element name="businessCode" type="xsd:string"/>
+                        <xsd:element name="sourceType" type="xsd:string"/>
+                        <xsd:element name="priority" type="xsd:integer"/>
+                        <xsd:element name="flagBlock" type="xsd:integer"/>
+                        <xsd:element name="comment" type="xsd:string"/>
+                        <xsd:element name="filterGroups" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="filterFields" maxOccurs="unbounded">
+                                        <xsd:complexType>
+                                            <xsd:sequence>
+                                                <xsd:element name="filterField" type="xsd:string"/>
+                                                <xsd:element name="filterOperator" type="xsd:string"/>
+                                                <xsd:element name="filterValue" type="xsd:string"/>
+                                            </xsd:sequence>
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://mock.pstmn.io/soap/response">
+            <xsd:element name="Response">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="status" type="xsd:integer"/>
+                        <xsd:element name="id" type="xsd:string"/>
+                        <xsd:element name="responseData" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="citizenId" type="xsd:integer"/>
+                                    <xsd:element name="citizenCode" type="xsd:string"/>
+                                    <xsd:element name="citizenStatus" type="xsd:integer"/>
+                                    <xsd:element name="citizenPid" type="xsd:string"/>
+                                    <xsd:element name="citizenPidStatus" type="xsd:integer"/>
+                                    <xsd:element name="identifyNumber" type="xsd:string"/>
+                                    <xsd:element name="lastNameSrch" type="xsd:string"/>
+                                    <xsd:element name="middleName" type="xsd:string"/>
+                                    <xsd:element name="fullName" type="xsd:string"/>
+                                    <xsd:element name="fullNameSrch" type="xsd:string"/>
+                                    <xsd:element name="birthDate" type="xsd:string"/>
+                                    <xsd:element name="gender" type="xsd:integer"/>
+                                    <xsd:element name="ethnicId" type="xsd:string"/>
+                                    <xsd:element name="marriageStatus" type="xsd:string"/>
+                                    <xsd:element name="militaryDuty" type="xsd:string"/>
+                                    <xsd:element name="religionId" type="xsd:string"/>
+                                    <xsd:element name="hhName" type="xsd:string"/>
+                                    <xsd:element name="hhRelationshipId" type="xsd:string"/>
+                                    <xsd:element name="hhProfileFamilyResNumber" type="xsd:string"/>
+                                    <xsd:element name="fatherName" type="xsd:string"/>
+                                    <xsd:element name="fatherPid" type="xsd:string"/>
+                                    <xsd:element name="motherName" type="xsd:string"/>
+                                    <xsd:element name="motherPid" type="xsd:string"/>
+                                    <xsd:element name="permanentCityId" type="xsd:string"/>
+                                    <xsd:element name="workAddress" type="xsd:string"/>
+                                    <xsd:element name="forename" type="xsd:string"/>
+                                    <xsd:element name="absentType" type="xsd:integer"/>
+                                    <xsd:element name="identifyApproveDate" type="xsd:string"/>
+                                    <xsd:element name="cleaningStatus" type="xsd:integer"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </wsdl:types>
+
+    <!-- Message Definitions -->
+    <wsdl:message name="RequestMessage">
+        <wsdl:part name="parameters" element="req:Request"/>
+    </wsdl:message>
+    <wsdl:message name="ResponseMessage">
+        <wsdl:part name="parameters" element="res:Response"/>
+    </wsdl:message>
+
+    <!-- PortType Definition -->
+    <wsdl:portType name="MockPortType">
+        <wsdl:operation name="processRequest">
+            <wsdl:documentation>
+                Processes the request and returns a response.
+            </wsdl:documentation>
+            <wsdl:input message="tns:RequestMessage"/>
+            <wsdl:output message="tns:ResponseMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <!-- Binding Definition -->
+    <wsdl:binding name="MockBinding" type="tns:MockPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="processRequest">
+            <soap:operation soapAction="processRequest"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <!-- Service Definition -->
+    <wsdl:service name="MockSoapService">
+        <wsdl:documentation>
+            SOAP Service for processing requests.
+        </wsdl:documentation>
+        <wsdl:port name="MockPort" binding="tns:MockBinding">
+            <soap:address location="https://fbc12ad4-7b2f-435d-96c9-08b373a86cc1.mock.pstmn.io/rest"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
