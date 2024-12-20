@@ -1,0 +1,1194 @@
+swagger: '2.0'
+info:
+  title: switch-policy
+  description: SOAP Service for processing requests.
+  x-ibm-name: switch-policy
+  version: 0.1
+schemes:
+  - https
+basePath: /switch-policy
+produces:
+  - application/xml
+consumes:
+  - application/xml
+securityDefinitions:
+  clientID:
+    type: apiKey
+    name: X-IBM-Client-Id
+    in: header
+    description: ''
+security:
+  - clientID: []
+x-ibm-configuration:
+  type: wsdl
+  phase: realized
+  enforced: true
+  testable: true
+  gateway: datapower-api-gateway
+  cors:
+    enabled: true
+  wsdl-definition:
+    wsdl: MockSoapService.wsdl
+    service: MockSoapService
+    port: MockPort
+    soap-version: '1.1'
+  assembly:
+    execute:
+      - map:
+          version: 2.1.0
+          title: map
+          inputs:
+            input:
+              schema:
+                type: object
+                properties:
+                  Envelope:
+                    type: object
+                    properties:
+                      Header:
+                        type: object
+                        name: Header
+                      Body:
+                        type: object
+                        properties:
+                          TraCuuThongTinCongDan:
+                            type: object
+                            properties:
+                              MaYeuCau:
+                                type: string
+                                name: MaYeuCau
+                              MaDVC:
+                                type: string
+                                name: MaDVC
+                              MaTichHop:
+                                type: string
+                                name: MaTichHop
+                              MaCanBo:
+                                type: string
+                                name: MaCanBo
+                              SoDinhDanh:
+                                type: string
+                                name: SoDinhDanh
+                              HoVaTen:
+                                type: string
+                                name: HoVaTen
+                              NgayThangNamSinh:
+                                type: object
+                                properties:
+                                  NgayThangNam:
+                                    type: string
+                                    name: NgayThangNam
+                                name: NgayThangNamSinh
+                            xml:
+                              namespace: http://dancuquocgia.bca
+                              prefix: dan
+                            name: TraCuuThongTinCongDan
+                        name: Body
+                    xml:
+                      namespace: http://schemas.xmlsoap.org/soap/envelope/
+                      prefix: soapenv
+                    name: Envelope
+                xml:
+                  namespace: ''
+                example: "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:dan=\"http://dancuquocgia.bca\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <dan:TraCuuThongTinCongDan xmlns:dan=\"http://dancuquocgia.bca\">\r\n            <dan:MaYeuCau>TEST4333</dan:MaYeuCau>\r\n            <dan:MaDVC>G2222</dan:MaDVC>\r\n            <dan:MaTichHop>035</dan:MaTichHop>\r\n            <dan:MaCanBo>DEV_TEST</dan:MaCanBo>\r\n            <dan:SoDinhDanh>100000010801</dan:SoDinhDanh>\r\n            <dan:HoVaTen>TRANVANTRUNG</dan:HoVaTen>\r\n            <dan:NgayThangNamSinh>\r\n                <dan:NgayThangNam>19900101</dan:NgayThangNam>\r\n            </dan:NgayThangNamSinh>\r\n        </dan:TraCuuThongTinCongDan>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>"
+              variable: request.body
+              content: application/xml
+          outputs:
+            output:
+              schema:
+                type: object
+                properties:
+                  requestCodeExt:
+                    type: string
+                    name: requestCodeExt
+                  requestType:
+                    type: string
+                    name: requestType
+                  channelType:
+                    type: number
+                    name: channelType
+                  sourceOrgUnitId:
+                    type: string
+                    name: sourceOrgUnitId
+                  createdUns1Name:
+                    type: string
+                    name: createdUns1Name
+                  sourceOrgUnitLevel:
+                    type: number
+                    name: sourceOrgUnitLevel
+                  sourceProvinceId:
+                    type: string
+                    name: sourceProvinceId
+                  sourceDistrictId:
+                    type: string
+                    name: sourceDistrictId
+                  sourceSubDistrictId:
+                    type: string
+                    name: sourceSubDistrictId
+                  businessCode:
+                    type: string
+                    name: businessCode
+                  sourceType:
+                    type: string
+                    name: sourceType
+                  priority:
+                    type: number
+                    name: priority
+                  flagBlock:
+                    type: number
+                    name: flagBlock
+                  comment:
+                    type: string
+                    name: comment
+                  filterGroups:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        filterFields:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              filterField:
+                                type: string
+                                name: filterField
+                              filterOperator:
+                                type: string
+                                name: filterOperator
+                              filterValue:
+                                type: string
+                                name: filterValue
+                          name: filterFields
+                    name: filterGroups
+                example: >-
+                  {"requestCodeExt":"4235435345","requestType":"035","channelType":1,"sourceOrgUnitId":"BA","createdUns1Name":"DEV_TEST","sourceOrgUnitLevel":2,"sourceProvinceId":"esb","sourceDistrictId":"esb","sourceSubDistrictId":"esb","businessCode":"G2299","sourceType":"DEV_TEST","priority":1,"flagBlock":1,"comment":"1","filterGroups":[{"filterFields":[{"filterField":"CITIZEN_PID","filterOperator":"eq","filterValue":"100000010801"}]}]}
+              variable: message.body
+              content: application/json
+          actions:
+            - set: output.requestType
+              from: input.Envelope.Body.TraCuuThongTinCongDan.MaTichHop
+            - set: output.createdUns1Name
+              from: input.Envelope.Body.TraCuuThongTinCongDan.MaCanBo
+            - create: output.filterGroups
+              foreach: input.Envelope
+              from: input.Envelope
+              actions:
+                - create: filterFields
+                  foreach: Body
+                  from: Body
+                  actions:
+                    - set: filterValue
+                      from: TraCuuThongTinCongDan.SoDinhDanh
+      - invoke:
+          title: invoke
+          target-url: https://fbc12ad4-7b2f-435d-96c9-08b373a86cc1.mock.pstmn.io/rest
+          version: 2.0.0
+          header-control:
+            type: blocklist
+            values: []
+          parameter-control:
+            type: blocklist
+            values: []
+          persistent-connection: true
+      - map:
+          version: 2.1.0
+          title: map
+          inputs:
+            input:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    name: status
+                  id:
+                    type: string
+                    name: id
+                  responseData:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        citizenId:
+                          type: number
+                          name: citizenId
+                        citizenCode:
+                          type: string
+                          name: citizenCode
+                        citizenStatus:
+                          type: number
+                          name: citizenStatus
+                        citizenPid:
+                          type: string
+                          name: citizenPid
+                        citizenPidStatus:
+                          type: number
+                          name: citizenPidStatus
+                        identifyNumber:
+                          type: string
+                          name: identifyNumber
+                        lastNameSrch:
+                          type: string
+                          name: lastNameSrch
+                        middleName:
+                          type: string
+                          name: middleName
+                        fullName:
+                          type: string
+                          name: fullName
+                        fullNameSrch:
+                          type: string
+                          name: fullNameSrch
+                        birthDate:
+                          type: string
+                          name: birthDate
+                        gender:
+                          type: number
+                          name: gender
+                        ethnicId:
+                          type: string
+                          name: ethnicId
+                        marriageStatus:
+                          type: string
+                          name: marriageStatus
+                        militaryDuty:
+                          type: string
+                          name: militaryDuty
+                        religionId:
+                          type: string
+                          name: religionId
+                        hhName:
+                          type: string
+                          name: hhName
+                        hhRelationshipId:
+                          type: string
+                          name: hhRelationshipId
+                        hhProfileFamilyResNumber:
+                          type: string
+                          name: hhProfileFamilyResNumber
+                        fatherName:
+                          type: string
+                          name: fatherName
+                        fatherPid:
+                          type: string
+                          name: fatherPid
+                        motherName:
+                          type: string
+                          name: motherName
+                        motherPid:
+                          type: string
+                          name: motherPid
+                        permanentCityId:
+                          type: string
+                          name: permanentCityId
+                        workAddress:
+                          type: string
+                          name: workAddress
+                        forename:
+                          type: string
+                          name: forename
+                        absentType:
+                          type: number
+                          name: absentType
+                        identifyApproveDate:
+                          type: string
+                          name: identifyApproveDate
+                        cleaningStatus:
+                          type: number
+                          name: cleaningStatus
+                    name: responseData
+                example: >-
+                  {"status":1,"id":"3e1f0d44-a612-46ba-a77d-84228aba2db9","responseData":[{"citizenId":1029354489,"citizenCode":"79bf9c88527b4acfbdea14e356844e9a","citizenStatus":1,"citizenPid":"100000010801","citizenPidStatus":1,"identifyNumber":"123321123","lastNameSrch":"TRUNG","middleName":"VĂN","fullName":"TRẦN
+                  VĂN
+                  TRUNG","fullNameSrch":"TRANVANTRUNG","birthDate":"19900101","gender":1,"ethnicId":"00","marriageStatus":"1","militaryDuty":"0","religionId":"00","hhName":"N/A","hhRelationshipId":"CH01","hhProfileFamilyResNumber":"1232434","fatherName":"ABC
+                  TEST","fatherPid":"001001001001","motherName":"ABC TEST
+                  1","motherPid":"001001002001","permanentCityId":"30","workAddress":"N/A","forename":"TRAN","absentType":1,"identifyApproveDate":"20190529","cleaningStatus":1}]}
+              variable: message.body
+              content: application/json
+          outputs:
+            output:
+              schema:
+                type: object
+                properties:
+                  Envelope:
+                    type: object
+                    properties:
+                      Header:
+                        type: object
+                        name: Header
+                      Body:
+                        type: object
+                        properties:
+                          CongdanCollection:
+                            type: object
+                            properties:
+                              CongDan:
+                                type: object
+                                properties:
+                                  SoDinhDanh:
+                                    type: string
+                                    name: SoDinhDanh
+                                  SoCMND:
+                                    type: string
+                                    name: SoCMND
+                                  HoVaTen:
+                                    type: object
+                                    properties:
+                                      Ho:
+                                        type: object
+                                        name: Ho
+                                      ChuDem:
+                                        type: object
+                                        name: ChuDem
+                                      Ten:
+                                        type: string
+                                        name: Ten
+                                    name: HoVaTen
+                                  GioiTinh:
+                                    type: string
+                                    name: GioiTinh
+                                  DanToc:
+                                    type: string
+                                    name: DanToc
+                                  TonGiao:
+                                    type: string
+                                    name: TonGiao
+                                  TinhTrangHonNhan:
+                                    type: string
+                                    name: TinhTrangHonNhan
+                                  NhomMau:
+                                    type: object
+                                    name: NhomMau
+                                  NgayThangNamSinh:
+                                    type: object
+                                    properties:
+                                      Nam:
+                                        type: object
+                                        name: Nam
+                                      NgayThangNam:
+                                        type: string
+                                        name: NgayThangNam
+                                    name: NgayThangNamSinh
+                                  NoiDangKyKhaiSinh:
+                                    type: object
+                                    properties:
+                                      MaTinhThanh:
+                                        type: object
+                                        name: MaTinhThanh
+                                      MaQuanHuyen:
+                                        type: object
+                                        name: MaQuanHuyen
+                                      MaPhuongXa:
+                                        type: object
+                                        name: MaPhuongXa
+                                      ChiTiet:
+                                        type: object
+                                        name: ChiTiet
+                                      QuocGia:
+                                        type: object
+                                        name: QuocGia
+                                    name: NoiDangKyKhaiSinh
+                                  QuocTich:
+                                    type: object
+                                    name: QuocTich
+                                  QueQuan:
+                                    type: object
+                                    properties:
+                                      MaTinhThanh:
+                                        type: object
+                                        name: MaTinhThanh
+                                      MaQuanHuyen:
+                                        type: object
+                                        name: MaQuanHuyen
+                                      MaPhuongXa:
+                                        type: object
+                                        name: MaPhuongXa
+                                      ChiTiet:
+                                        type: object
+                                        name: ChiTiet
+                                      QuocGia:
+                                        type: object
+                                        name: QuocGia
+                                    name: QueQuan
+                                  ThuongTru:
+                                    type: object
+                                    properties:
+                                      MaTinhThanh:
+                                        type: object
+                                        name: MaTinhThanh
+                                      MaQuanHuyen:
+                                        type: object
+                                        name: MaQuanHuyen
+                                      MaPhuongXa:
+                                        type: object
+                                        name: MaPhuongXa
+                                      ChiTiet:
+                                        type: object
+                                        name: ChiTiet
+                                      QuocGia:
+                                        type: object
+                                        name: QuocGia
+                                    name: ThuongTru
+                                  NoiOHienTai:
+                                    type: object
+                                    properties:
+                                      MaTinhThanh:
+                                        type: object
+                                        name: MaTinhThanh
+                                      MaQuanHuyen:
+                                        type: object
+                                        name: MaQuanHuyen
+                                      MaPhuongXa:
+                                        type: object
+                                        name: MaPhuongXa
+                                      ChiTiet:
+                                        type: object
+                                        name: ChiTiet
+                                      QuocGia:
+                                        type: object
+                                        name: QuocGia
+                                    name: NoiOHienTai
+                                  Cha:
+                                    type: object
+                                    properties:
+                                      HoVaTen:
+                                        type: string
+                                        name: HoVaTen
+                                      QuocTich:
+                                        type: object
+                                        name: QuocTich
+                                      SoDinhDanh:
+                                        type: string
+                                        name: SoDinhDanh
+                                      SoCMND:
+                                        type: object
+                                        name: SoCMND
+                                    name: Cha
+                                  Me:
+                                    type: object
+                                    properties:
+                                      HoVaTen:
+                                        type: string
+                                        name: HoVaTen
+                                      QuocTich:
+                                        type: object
+                                        name: QuocTich
+                                      SoDinhDanh:
+                                        type: string
+                                        name: SoDinhDanh
+                                      SoCMND:
+                                        type: object
+                                        name: SoCMND
+                                    name: Me
+                                  VoChong:
+                                    type: object
+                                    properties:
+                                      HoVaTen:
+                                        type: object
+                                        name: HoVaTen
+                                      QuocTich:
+                                        type: object
+                                        name: QuocTich
+                                      SoDinhDanh:
+                                        type: object
+                                        name: SoDinhDanh
+                                      SoCMND:
+                                        type: object
+                                        name: SoCMND
+                                    name: VoChong
+                                  NguoiDaiDien:
+                                    type: object
+                                    properties:
+                                      HoVaTen:
+                                        type: object
+                                        name: HoVaTen
+                                      QuocTich:
+                                        type: object
+                                        name: QuocTich
+                                      SoDinhDanh:
+                                        type: object
+                                        name: SoDinhDanh
+                                      SoCMND:
+                                        type: object
+                                        name: SoCMND
+                                    name: NguoiDaiDien
+                                  ChuHo:
+                                    type: object
+                                    properties:
+                                      QuanHe:
+                                        type: object
+                                        name: QuanHe
+                                      SoDinhDanh:
+                                        type: object
+                                        name: SoDinhDanh
+                                      SoCMND:
+                                        type: object
+                                        name: SoCMND
+                                      HoVaTen:
+                                        type: string
+                                        name: HoVaTen
+                                    name: ChuHo
+                                  SoSoHoKhau:
+                                    type: object
+                                    name: SoSoHoKhau
+                                name: CongDan
+                            xml:
+                              namespace: http://www.mic.gov.vn/dancu/1.0
+                              prefix: ns1
+                            name: CongdanCollection
+                        name: Body
+                    xml:
+                      namespace: http://schemas.xmlsoap.org/soap/envelope/
+                      prefix: soapenv
+                    name: Envelope
+                xml:
+                  namespace: ''
+                example: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n    <soapenv:Header xmlns:dan=\"http://dancuquocgia.bca\"/>\r\n    <soapenv:Body xmlns:dan=\"http://dancuquocgia.bca\">\r\n        <ns1:CongdanCollection xmlns:ns1=\"http://www.mic.gov.vn/dancu/1.0\">\r\n            <ns1:CongDan>\r\n                <ns1:SoDinhDanh>100000010801</ns1:SoDinhDanh>\r\n                <ns1:SoCMND>123321123</ns1:SoCMND>\r\n                <ns1:HoVaTen>\r\n                    <ns1:Ho/>\r\n                    <ns1:ChuDem/>\r\n                    <ns1:Ten>TRẦN VĂN TRUNG</ns1:Ten>\r\n                </ns1:HoVaTen>\r\n                <ns1:GioiTinh>1</ns1:GioiTinh>\r\n                <ns1:DanToc>00</ns1:DanToc>\r\n                <ns1:TonGiao>00</ns1:TonGiao>\r\n                <ns1:TinhTrangHonNhan>1</ns1:TinhTrangHonNhan>\r\n                <ns1:NhomMau/>\r\n                <ns1:NgayThangNamSinh>\r\n                    <ns1:Nam/>\r\n                    <ns1:NgayThangNam>19900101</ns1:NgayThangNam>\r\n                </ns1:NgayThangNamSinh>\r\n                <ns1:NoiDangKyKhaiSinh>\r\n                    <ns1:MaTinhThanh/>\r\n                    <ns1:MaQuanHuyen/>\r\n                    <ns1:MaPhuongXa/>\r\n                    <ns1:ChiTiet/>\r\n                    <ns1:QuocGia/>\r\n                </ns1:NoiDangKyKhaiSinh>\r\n                <ns1:QuocTich/>\r\n                <ns1:QueQuan>\r\n                    <ns1:MaTinhThanh/>\r\n                    <ns1:MaQuanHuyen/>\r\n                    <ns1:MaPhuongXa/>\r\n                    <ns1:ChiTiet/>\r\n                    <ns1:QuocGia/>\r\n                </ns1:QueQuan>\r\n                <ns1:ThuongTru>\r\n                    <ns1:MaTinhThanh/>\r\n                    <ns1:MaQuanHuyen/>\r\n                    <ns1:MaPhuongXa/>\r\n                    <ns1:ChiTiet/>\r\n                    <ns1:QuocGia/>\r\n                </ns1:ThuongTru>\r\n                <ns1:NoiOHienTai>\r\n                    <ns1:MaTinhThanh/>\r\n                    <ns1:MaQuanHuyen/>\r\n                    <ns1:MaPhuongXa/>\r\n                    <ns1:ChiTiet/>\r\n                    <ns1:QuocGia/>\r\n                </ns1:NoiOHienTai>\r\n                <ns1:Cha>\r\n                    <ns1:HoVaTen>ABC TEST</ns1:HoVaTen>\r\n                    <ns1:QuocTich/>\r\n                    <ns1:SoDinhDanh>001001001001</ns1:SoDinhDanh>\r\n                    <ns1:SoCMND/>\r\n                </ns1:Cha>\r\n                <ns1:Me>\r\n                    <ns1:HoVaTen>ABC TEST 1</ns1:HoVaTen>\r\n                    <ns1:QuocTich/>\r\n                    <ns1:SoDinhDanh>001001002001</ns1:SoDinhDanh>\r\n                    <ns1:SoCMND/>\r\n                </ns1:Me>\r\n                <ns1:VoChong>\r\n                    <ns1:HoVaTen/>\r\n                    <ns1:QuocTich/>\r\n                    <ns1:SoDinhDanh/>\r\n                    <ns1:SoCMND/>\r\n                </ns1:VoChong>\r\n                <ns1:NguoiDaiDien>\r\n                    <ns1:HoVaTen/>\r\n                    <ns1:QuocTich/>\r\n                    <ns1:SoDinhDanh/>\r\n                    <ns1:SoCMND/>\r\n                </ns1:NguoiDaiDien>\r\n                <ns1:ChuHo>\r\n                    <ns1:QuanHe/>\r\n                    <ns1:SoDinhDanh/>\r\n                    <ns1:SoCMND/>\r\n                    <ns1:HoVaTen>N/A</ns1:HoVaTen>\r\n                </ns1:ChuHo>\r\n                <ns1:SoSoHoKhau/>\r\n            </ns1:CongDan>\r\n        </ns1:CongdanCollection>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>"
+              variable: message.body
+              content: application/xml
+          actions:
+            - set: output.Envelope.Body.CongdanCollection.CongDan.SoDinhDanh
+              from: input.responseData.citizenPid
+            - set: output.Envelope.Body.CongdanCollection.CongDan.SoCMND
+              from: input.responseData.identifyNumber
+            - set: output.Envelope.Body.CongdanCollection.CongDan.HoVaTen.Ten
+              from: input.responseData.fullName
+            - set: >-
+                output.Envelope.Body.CongdanCollection.CongDan.NgayThangNamSinh.NgayThangNam
+              from: input.responseData.birthDate
+            - set: output.Envelope.Body.CongdanCollection.CongDan.GioiTinh
+              from: input.responseData.gender
+            - set: output.Envelope.Body.CongdanCollection.CongDan.DanToc
+              from: input.responseData.ethnicId
+            - set: output.Envelope.Body.CongdanCollection.CongDan.TonGiao
+              from: input.responseData.religionId
+            - set: output.Envelope.Body.CongdanCollection.CongDan.TinhTrangHonNhan
+              from: input.responseData.marriageStatus
+            - set: output.Envelope.Body.CongdanCollection.CongDan.Cha.HoVaTen
+              from: input.responseData.fatherName
+            - set: output.Envelope.Body.CongdanCollection.CongDan.Cha.SoDinhDanh
+              from: input.responseData.fatherPid
+            - set: output.Envelope.Body.CongdanCollection.CongDan.Me.HoVaTen
+              from: input.responseData.motherName
+            - set: output.Envelope.Body.CongdanCollection.CongDan.Me.SoDinhDanh
+              from: input.responseData.motherPid
+    finally: []
+    catch: []
+  x-ibm-apiconnect-wsdl:
+    package-version: 2.0.36
+    options: {}
+    messages:
+      info: []
+      warning: []
+      error: []
+    previous:
+      package-version: 2.0.36
+      options: {}
+      messages:
+        info: []
+        warning: []
+        error: []
+      previous:
+        package-version: 2.0.36
+        options: {}
+        messages:
+          info: []
+          warning: []
+          error: []
+  activity-log:
+    enabled: true
+    success-content: activity
+    error-content: payload
+paths:
+  /processRequest:
+    post:
+      summary: Operation processRequest
+      description: Processes the request and returns a response.
+      operationId: processRequest
+      x-ibm-soap:
+        soap-action: processRequest
+        soap-operation: '{http://mock.pstmn.io/soap/request}Request'
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/processRequestInput'
+      responses:
+        default:
+          description: ''
+          schema:
+            $ref: '#/definitions/processRequestOutput'
+definitions:
+  Security:
+    xml:
+      namespace: >-
+        http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+      prefix: wsse
+    description: Header for WS-Security
+    type: object
+    properties:
+      UsernameToken:
+        xml:
+          namespace: >-
+            http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+          prefix: wsse
+        type: object
+        properties:
+          Username:
+            xml:
+              namespace: >-
+                http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+              prefix: wsse
+            type: string
+          Password:
+            xml:
+              namespace: >-
+                http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+              prefix: wsse
+            type: string
+          Nonce:
+            xml:
+              namespace: >-
+                http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+              prefix: wsse
+            type: string
+            properties:
+              EncodingType:
+                xml:
+                  namespace: ''
+                  attribute: true
+                type: string
+          Created:
+            xml:
+              namespace: >-
+                http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd
+              prefix: wsu
+            type: string
+      Timestamp:
+        xml:
+          namespace: >-
+            http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd
+          prefix: wsu
+        type: object
+        properties:
+          Created:
+            xml:
+              namespace: >-
+                http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd
+              prefix: wsu
+            type: string
+          Expires:
+            xml:
+              namespace: >-
+                http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd
+              prefix: wsu
+            type: string
+          Id:
+            xml:
+              namespace: >-
+                http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd
+              prefix: wsu
+              attribute: true
+            type: string
+  processRequestInput:
+    description: Input message for wsdl operation Request
+    type: object
+    properties:
+      Envelope:
+        xml:
+          namespace: http://schemas.xmlsoap.org/soap/envelope/
+          prefix: soapenv
+        type: object
+        properties:
+          Header:
+            $ref: '#/definitions/processRequestHeader'
+          Body:
+            xml:
+              namespace: http://schemas.xmlsoap.org/soap/envelope/
+              prefix: soapenv
+            type: object
+            properties:
+              Request:
+                $ref: '#/definitions/Request_element_req'
+            required:
+              - Request
+        required:
+          - Body
+    required:
+      - Envelope
+    x-ibm-schema:
+      wsdl-port: '{http://mock.pstmn.io/soap}MockPort'
+      wsdl-operation: Request
+      wsdl-message-direction-or-name: RequestRequest
+    example: >-
+
+      <soapenv:Envelope
+      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+       <soapenv:Header>
+        <!-- The Security element should be removed if WS-Security is not enabled on the SOAP target-url -->
+        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+         <wsse:UsernameToken>
+          <wsse:Username>string</wsse:Username>
+          <wsse:Password>string</wsse:Password>
+          <wsse:Nonce EncodingType="string">string</wsse:Nonce>
+          <wsu:Created>string</wsu:Created>
+         </wsse:UsernameToken>
+         <wsu:Timestamp wsu:Id="string">
+          <wsu:Created>string</wsu:Created>
+          <wsu:Expires>string</wsu:Expires>
+         </wsu:Timestamp>
+        </wsse:Security>
+       </soapenv:Header>
+       <soapenv:Body>
+        <req:Request xmlns:req="http://mock.pstmn.io/soap/request"><!-- mandatory -->
+         <requestCodeExt><!-- mandatory -->string</requestCodeExt>
+         <requestType><!-- mandatory -->string</requestType>
+         <channelType><!-- mandatory -->3</channelType>
+         <sourceOrgUnitId><!-- mandatory -->string</sourceOrgUnitId>
+         <createdUns1Name><!-- mandatory -->string</createdUns1Name>
+         <sourceOrgUnitLevel><!-- mandatory -->3</sourceOrgUnitLevel>
+         <sourceProvinceId><!-- mandatory -->string</sourceProvinceId>
+         <sourceDistrictId><!-- mandatory -->string</sourceDistrictId>
+         <sourceSubDistrictId><!-- mandatory -->string</sourceSubDistrictId>
+         <businessCode><!-- mandatory -->string</businessCode>
+         <sourceType><!-- mandatory -->string</sourceType>
+         <priority><!-- mandatory -->3</priority>
+         <flagBlock><!-- mandatory -->3</flagBlock>
+         <comment><!-- mandatory -->string</comment>
+         <filterGroups><!-- mandatory --><!-- between 1 and unlimited repetitions of this element -->
+          <filterFields><!-- mandatory --><!-- between 1 and unlimited repetitions of this element -->
+           <filterField><!-- mandatory -->string</filterField>
+           <filterOperator><!-- mandatory -->string</filterOperator>
+           <filterValue><!-- mandatory -->string</filterValue>
+          </filterFields>
+         </filterGroups>
+        </req:Request>
+       </soapenv:Body>
+      </soapenv:Envelope>
+  processRequestHeader:
+    description: Input headers for wsdl operation Request
+    type: object
+    properties:
+      Security:
+        $ref: '#/definitions/Security'
+  processRequestOutput:
+    description: Output message for wsdl operation Request
+    type: object
+    properties:
+      Envelope:
+        xml:
+          namespace: http://schemas.xmlsoap.org/soap/envelope/
+          prefix: soapenv
+        type: object
+        properties:
+          Body:
+            xml:
+              namespace: http://schemas.xmlsoap.org/soap/envelope/
+              prefix: soapenv
+            type: object
+            properties:
+              Response:
+                $ref: '#/definitions/Response_element_res'
+        required:
+          - Body
+    required:
+      - Envelope
+    x-ibm-schema:
+      wsdl-port: '{http://mock.pstmn.io/soap}MockPort'
+      wsdl-operation: Request
+      wsdl-message-direction-or-name: RequestResponse
+    example: >-
+
+      <soapenv:Envelope
+      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+       <soapenv:Body>
+        <res:Response xmlns:res="http://mock.pstmn.io/soap/response">
+         <status><!-- mandatory -->3</status>
+         <id><!-- mandatory -->string</id>
+         <responseData><!-- mandatory --><!-- between 1 and unlimited repetitions of this element -->
+          <citizenId><!-- mandatory -->3</citizenId>
+          <citizenCode><!-- mandatory -->string</citizenCode>
+          <citizenStatus><!-- mandatory -->3</citizenStatus>
+          <citizenPid><!-- mandatory -->string</citizenPid>
+          <citizenPidStatus><!-- mandatory -->3</citizenPidStatus>
+          <identifyNumber><!-- mandatory -->string</identifyNumber>
+          <lastNameSrch><!-- mandatory -->string</lastNameSrch>
+          <middleName><!-- mandatory -->string</middleName>
+          <fullName><!-- mandatory -->string</fullName>
+          <fullNameSrch><!-- mandatory -->string</fullNameSrch>
+          <birthDate><!-- mandatory -->string</birthDate>
+          <gender><!-- mandatory -->3</gender>
+          <ethnicId><!-- mandatory -->string</ethnicId>
+          <marriageStatus><!-- mandatory -->string</marriageStatus>
+          <militaryDuty><!-- mandatory -->string</militaryDuty>
+          <religionId><!-- mandatory -->string</religionId>
+          <hhName><!-- mandatory -->string</hhName>
+          <hhRelationshipId><!-- mandatory -->string</hhRelationshipId>
+          <hhProfileFamilyResNumber><!-- mandatory -->string</hhProfileFamilyResNumber>
+          <fatherName><!-- mandatory -->string</fatherName>
+          <fatherPid><!-- mandatory -->string</fatherPid>
+          <motherName><!-- mandatory -->string</motherName>
+          <motherPid><!-- mandatory -->string</motherPid>
+          <permanentCityId><!-- mandatory -->string</permanentCityId>
+          <workAddress><!-- mandatory -->string</workAddress>
+          <forename><!-- mandatory -->string</forename>
+          <absentType><!-- mandatory -->3</absentType>
+          <identifyApproveDate><!-- mandatory -->string</identifyApproveDate>
+          <cleaningStatus><!-- mandatory -->3</cleaningStatus>
+         </responseData>
+        </res:Response>
+       </soapenv:Body>
+      </soapenv:Envelope>
+  Request_element_req:
+    xml:
+      namespace: http://mock.pstmn.io/soap/request
+      prefix: req
+      name: Request
+    type: object
+    properties:
+      requestCodeExt:
+        xml:
+          namespace: ''
+        type: string
+      requestType:
+        xml:
+          namespace: ''
+        type: string
+      channelType:
+        xml:
+          namespace: ''
+        type: number
+      sourceOrgUnitId:
+        xml:
+          namespace: ''
+        type: string
+      createdUns1Name:
+        xml:
+          namespace: ''
+        type: string
+      sourceOrgUnitLevel:
+        xml:
+          namespace: ''
+        type: number
+      sourceProvinceId:
+        xml:
+          namespace: ''
+        type: string
+      sourceDistrictId:
+        xml:
+          namespace: ''
+        type: string
+      sourceSubDistrictId:
+        xml:
+          namespace: ''
+        type: string
+      businessCode:
+        xml:
+          namespace: ''
+        type: string
+      sourceType:
+        xml:
+          namespace: ''
+        type: string
+      priority:
+        xml:
+          namespace: ''
+        type: number
+      flagBlock:
+        xml:
+          namespace: ''
+        type: number
+      comment:
+        xml:
+          namespace: ''
+        type: string
+      filterGroups:
+        type: array
+        minItems: 1
+        items:
+          xml:
+            namespace: ''
+            prefix: ''
+          type: object
+          properties:
+            filterFields:
+              type: array
+              minItems: 1
+              items:
+                xml:
+                  namespace: ''
+                  prefix: ''
+                type: object
+                properties:
+                  filterField:
+                    xml:
+                      namespace: ''
+                    type: string
+                  filterOperator:
+                    xml:
+                      namespace: ''
+                    type: string
+                  filterValue:
+                    xml:
+                      namespace: ''
+                    type: string
+                required:
+                  - filterField
+                  - filterOperator
+                  - filterValue
+          required:
+            - filterFields
+    required:
+      - requestCodeExt
+      - requestType
+      - channelType
+      - sourceOrgUnitId
+      - createdUns1Name
+      - sourceOrgUnitLevel
+      - sourceProvinceId
+      - sourceDistrictId
+      - sourceSubDistrictId
+      - businessCode
+      - sourceType
+      - priority
+      - flagBlock
+      - comment
+      - filterGroups
+    example: |-
+
+      <req:Request xmlns:req="http://mock.pstmn.io/soap/request">
+       <requestCodeExt><!-- mandatory -->string</requestCodeExt>
+       <requestType><!-- mandatory -->string</requestType>
+       <channelType><!-- mandatory -->3</channelType>
+       <sourceOrgUnitId><!-- mandatory -->string</sourceOrgUnitId>
+       <createdUns1Name><!-- mandatory -->string</createdUns1Name>
+       <sourceOrgUnitLevel><!-- mandatory -->3</sourceOrgUnitLevel>
+       <sourceProvinceId><!-- mandatory -->string</sourceProvinceId>
+       <sourceDistrictId><!-- mandatory -->string</sourceDistrictId>
+       <sourceSubDistrictId><!-- mandatory -->string</sourceSubDistrictId>
+       <businessCode><!-- mandatory -->string</businessCode>
+       <sourceType><!-- mandatory -->string</sourceType>
+       <priority><!-- mandatory -->3</priority>
+       <flagBlock><!-- mandatory -->3</flagBlock>
+       <comment><!-- mandatory -->string</comment>
+       <filterGroups><!-- mandatory --><!-- between 1 and unlimited repetitions of this element -->
+        <filterFields><!-- mandatory --><!-- between 1 and unlimited repetitions of this element -->
+         <filterField><!-- mandatory -->string</filterField>
+         <filterOperator><!-- mandatory -->string</filterOperator>
+         <filterValue><!-- mandatory -->string</filterValue>
+        </filterFields>
+       </filterGroups>
+      </req:Request>
+  Response_element_res:
+    xml:
+      namespace: http://mock.pstmn.io/soap/response
+      prefix: res
+      name: Response
+    type: object
+    properties:
+      status:
+        xml:
+          namespace: ''
+        type: number
+      id:
+        xml:
+          namespace: ''
+        type: string
+      responseData:
+        type: array
+        minItems: 1
+        items:
+          xml:
+            namespace: ''
+            prefix: ''
+          type: object
+          properties:
+            citizenId:
+              xml:
+                namespace: ''
+              type: number
+            citizenCode:
+              xml:
+                namespace: ''
+              type: string
+            citizenStatus:
+              xml:
+                namespace: ''
+              type: number
+            citizenPid:
+              xml:
+                namespace: ''
+              type: string
+            citizenPidStatus:
+              xml:
+                namespace: ''
+              type: number
+            identifyNumber:
+              xml:
+                namespace: ''
+              type: string
+            lastNameSrch:
+              xml:
+                namespace: ''
+              type: string
+            middleName:
+              xml:
+                namespace: ''
+              type: string
+            fullName:
+              xml:
+                namespace: ''
+              type: string
+            fullNameSrch:
+              xml:
+                namespace: ''
+              type: string
+            birthDate:
+              xml:
+                namespace: ''
+              type: string
+            gender:
+              xml:
+                namespace: ''
+              type: number
+            ethnicId:
+              xml:
+                namespace: ''
+              type: string
+            marriageStatus:
+              xml:
+                namespace: ''
+              type: string
+            militaryDuty:
+              xml:
+                namespace: ''
+              type: string
+            religionId:
+              xml:
+                namespace: ''
+              type: string
+            hhName:
+              xml:
+                namespace: ''
+              type: string
+            hhRelationshipId:
+              xml:
+                namespace: ''
+              type: string
+            hhProfileFamilyResNumber:
+              xml:
+                namespace: ''
+              type: string
+            fatherName:
+              xml:
+                namespace: ''
+              type: string
+            fatherPid:
+              xml:
+                namespace: ''
+              type: string
+            motherName:
+              xml:
+                namespace: ''
+              type: string
+            motherPid:
+              xml:
+                namespace: ''
+              type: string
+            permanentCityId:
+              xml:
+                namespace: ''
+              type: string
+            workAddress:
+              xml:
+                namespace: ''
+              type: string
+            forename:
+              xml:
+                namespace: ''
+              type: string
+            absentType:
+              xml:
+                namespace: ''
+              type: number
+            identifyApproveDate:
+              xml:
+                namespace: ''
+              type: string
+            cleaningStatus:
+              xml:
+                namespace: ''
+              type: number
+          required:
+            - citizenId
+            - citizenCode
+            - citizenStatus
+            - citizenPid
+            - citizenPidStatus
+            - identifyNumber
+            - lastNameSrch
+            - middleName
+            - fullName
+            - fullNameSrch
+            - birthDate
+            - gender
+            - ethnicId
+            - marriageStatus
+            - militaryDuty
+            - religionId
+            - hhName
+            - hhRelationshipId
+            - hhProfileFamilyResNumber
+            - fatherName
+            - fatherPid
+            - motherName
+            - motherPid
+            - permanentCityId
+            - workAddress
+            - forename
+            - absentType
+            - identifyApproveDate
+            - cleaningStatus
+    required:
+      - status
+      - id
+      - responseData
+    example: |-
+
+      <res:Response xmlns:res="http://mock.pstmn.io/soap/response">
+       <status><!-- mandatory -->3</status>
+       <id><!-- mandatory -->string</id>
+       <responseData><!-- mandatory --><!-- between 1 and unlimited repetitions of this element -->
+        <citizenId><!-- mandatory -->3</citizenId>
+        <citizenCode><!-- mandatory -->string</citizenCode>
+        <citizenStatus><!-- mandatory -->3</citizenStatus>
+        <citizenPid><!-- mandatory -->string</citizenPid>
+        <citizenPidStatus><!-- mandatory -->3</citizenPidStatus>
+        <identifyNumber><!-- mandatory -->string</identifyNumber>
+        <lastNameSrch><!-- mandatory -->string</lastNameSrch>
+        <middleName><!-- mandatory -->string</middleName>
+        <fullName><!-- mandatory -->string</fullName>
+        <fullNameSrch><!-- mandatory -->string</fullNameSrch>
+        <birthDate><!-- mandatory -->string</birthDate>
+        <gender><!-- mandatory -->3</gender>
+        <ethnicId><!-- mandatory -->string</ethnicId>
+        <marriageStatus><!-- mandatory -->string</marriageStatus>
+        <militaryDuty><!-- mandatory -->string</militaryDuty>
+        <religionId><!-- mandatory -->string</religionId>
+        <hhName><!-- mandatory -->string</hhName>
+        <hhRelationshipId><!-- mandatory -->string</hhRelationshipId>
+        <hhProfileFamilyResNumber><!-- mandatory -->string</hhProfileFamilyResNumber>
+        <fatherName><!-- mandatory -->string</fatherName>
+        <fatherPid><!-- mandatory -->string</fatherPid>
+        <motherName><!-- mandatory -->string</motherName>
+        <motherPid><!-- mandatory -->string</motherPid>
+        <permanentCityId><!-- mandatory -->string</permanentCityId>
+        <workAddress><!-- mandatory -->string</workAddress>
+        <forename><!-- mandatory -->string</forename>
+        <absentType><!-- mandatory -->3</absentType>
+        <identifyApproveDate><!-- mandatory -->string</identifyApproveDate>
+        <cleaningStatus><!-- mandatory -->3</cleaningStatus>
+       </responseData>
+      </res:Response>
