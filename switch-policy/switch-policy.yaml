@@ -2,11 +2,11 @@ swagger: '2.0'
 info:
   title: switch-policy
   description: SOAP Service for processing requests.
-  x-ibm-name: switch-policy
-  version: 0.1
+  x-ibm-name: mapxml2json
+  version: 2.0.0
 schemes:
   - https
-basePath: /switch-policy
+basePath: /switch
 produces:
   - application/xml
 consumes:
@@ -34,545 +34,62 @@ x-ibm-configuration:
     soap-version: '1.1'
   assembly:
     execute:
-      - map:
-          version: 2.1.0
-          title: map
-          inputs:
-            input:
-              schema:
-                type: object
-                properties:
-                  Envelope:
-                    type: object
-                    properties:
-                      Header:
-                        type: object
-                        name: Header
-                      Body:
-                        type: object
-                        properties:
-                          TraCuuThongTinCongDan:
-                            type: object
-                            properties:
-                              MaYeuCau:
-                                type: string
-                                name: MaYeuCau
-                              MaDVC:
-                                type: string
-                                name: MaDVC
-                              MaTichHop:
-                                type: string
-                                name: MaTichHop
-                              MaCanBo:
-                                type: string
-                                name: MaCanBo
-                              SoDinhDanh:
-                                type: string
-                                name: SoDinhDanh
-                              HoVaTen:
-                                type: string
-                                name: HoVaTen
-                              NgayThangNamSinh:
-                                type: object
-                                properties:
-                                  NgayThangNam:
-                                    type: string
-                                    name: NgayThangNam
-                                name: NgayThangNamSinh
-                            xml:
-                              namespace: http://dancuquocgia.bca
-                              prefix: dan
-                            name: TraCuuThongTinCongDan
-                        name: Body
-                    xml:
-                      namespace: http://schemas.xmlsoap.org/soap/envelope/
-                      prefix: soapenv
-                    name: Envelope
-                xml:
-                  namespace: ''
-                example: "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:dan=\"http://dancuquocgia.bca\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <dan:TraCuuThongTinCongDan xmlns:dan=\"http://dancuquocgia.bca\">\r\n            <dan:MaYeuCau>TEST4333</dan:MaYeuCau>\r\n            <dan:MaDVC>G2222</dan:MaDVC>\r\n            <dan:MaTichHop>035</dan:MaTichHop>\r\n            <dan:MaCanBo>DEV_TEST</dan:MaCanBo>\r\n            <dan:SoDinhDanh>100000010801</dan:SoDinhDanh>\r\n            <dan:HoVaTen>TRANVANTRUNG</dan:HoVaTen>\r\n            <dan:NgayThangNamSinh>\r\n                <dan:NgayThangNam>19900101</dan:NgayThangNam>\r\n            </dan:NgayThangNamSinh>\r\n        </dan:TraCuuThongTinCongDan>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>"
-              variable: request.body
-              content: application/xml
-          outputs:
-            output:
-              schema:
-                type: object
-                properties:
-                  requestCodeExt:
-                    type: string
-                    name: requestCodeExt
-                  requestType:
-                    type: string
-                    name: requestType
-                  channelType:
-                    type: number
-                    name: channelType
-                  sourceOrgUnitId:
-                    type: string
-                    name: sourceOrgUnitId
-                  createdUns1Name:
-                    type: string
-                    name: createdUns1Name
-                  sourceOrgUnitLevel:
-                    type: number
-                    name: sourceOrgUnitLevel
-                  sourceProvinceId:
-                    type: string
-                    name: sourceProvinceId
-                  sourceDistrictId:
-                    type: string
-                    name: sourceDistrictId
-                  sourceSubDistrictId:
-                    type: string
-                    name: sourceSubDistrictId
-                  businessCode:
-                    type: string
-                    name: businessCode
-                  sourceType:
-                    type: string
-                    name: sourceType
-                  priority:
-                    type: number
-                    name: priority
-                  flagBlock:
-                    type: number
-                    name: flagBlock
-                  comment:
-                    type: string
-                    name: comment
-                  filterGroups:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        filterFields:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              filterField:
-                                type: string
-                                name: filterField
-                              filterOperator:
-                                type: string
-                                name: filterOperator
-                              filterValue:
-                                type: string
-                                name: filterValue
-                          name: filterFields
-                    name: filterGroups
-                example: >-
-                  {"requestCodeExt":"4235435345","requestType":"035","channelType":1,"sourceOrgUnitId":"BA","createdUns1Name":"DEV_TEST","sourceOrgUnitLevel":2,"sourceProvinceId":"esb","sourceDistrictId":"esb","sourceSubDistrictId":"esb","businessCode":"G2299","sourceType":"DEV_TEST","priority":1,"flagBlock":1,"comment":"1","filterGroups":[{"filterFields":[{"filterField":"CITIZEN_PID","filterOperator":"eq","filterValue":"100000010801"}]}]}
-              variable: message.body
-              content: application/json
-          actions:
-            - set: output.requestType
-              from: input.Envelope.Body.TraCuuThongTinCongDan.MaTichHop
-            - set: output.createdUns1Name
-              from: input.Envelope.Body.TraCuuThongTinCongDan.MaCanBo
-            - create: output.filterGroups
-              foreach: input.Envelope
-              from: input.Envelope
-              actions:
-                - create: filterFields
-                  foreach: Body
-                  from: Body
-                  actions:
-                    - set: filterValue
-                      from: TraCuuThongTinCongDan.SoDinhDanh
-      - invoke:
-          title: invoke
-          target-url: https://fbc12ad4-7b2f-435d-96c9-08b373a86cc1.mock.pstmn.io/rest
+      - switch:
           version: 2.0.0
-          header-control:
-            type: blocklist
-            values: []
-          parameter-control:
-            type: blocklist
-            values: []
-          persistent-connection: true
-      - map:
-          version: 2.1.0
-          title: map
-          inputs:
-            input:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    name: status
-                  id:
-                    type: string
-                    name: id
-                  responseData:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        citizenId:
-                          type: number
-                          name: citizenId
-                        citizenCode:
-                          type: string
-                          name: citizenCode
-                        citizenStatus:
-                          type: number
-                          name: citizenStatus
-                        citizenPid:
-                          type: string
-                          name: citizenPid
-                        citizenPidStatus:
-                          type: number
-                          name: citizenPidStatus
-                        identifyNumber:
-                          type: string
-                          name: identifyNumber
-                        lastNameSrch:
-                          type: string
-                          name: lastNameSrch
-                        middleName:
-                          type: string
-                          name: middleName
-                        fullName:
-                          type: string
-                          name: fullName
-                        fullNameSrch:
-                          type: string
-                          name: fullNameSrch
-                        birthDate:
-                          type: string
-                          name: birthDate
-                        gender:
-                          type: number
-                          name: gender
-                        ethnicId:
-                          type: string
-                          name: ethnicId
-                        marriageStatus:
-                          type: string
-                          name: marriageStatus
-                        militaryDuty:
-                          type: string
-                          name: militaryDuty
-                        religionId:
-                          type: string
-                          name: religionId
-                        hhName:
-                          type: string
-                          name: hhName
-                        hhRelationshipId:
-                          type: string
-                          name: hhRelationshipId
-                        hhProfileFamilyResNumber:
-                          type: string
-                          name: hhProfileFamilyResNumber
-                        fatherName:
-                          type: string
-                          name: fatherName
-                        fatherPid:
-                          type: string
-                          name: fatherPid
-                        motherName:
-                          type: string
-                          name: motherName
-                        motherPid:
-                          type: string
-                          name: motherPid
-                        permanentCityId:
-                          type: string
-                          name: permanentCityId
-                        workAddress:
-                          type: string
-                          name: workAddress
-                        forename:
-                          type: string
-                          name: forename
-                        absentType:
-                          type: number
-                          name: absentType
-                        identifyApproveDate:
-                          type: string
-                          name: identifyApproveDate
-                        cleaningStatus:
-                          type: number
-                          name: cleaningStatus
-                    name: responseData
-                example: >-
-                  {"status":1,"id":"3e1f0d44-a612-46ba-a77d-84228aba2db9","responseData":[{"citizenId":1029354489,"citizenCode":"79bf9c88527b4acfbdea14e356844e9a","citizenStatus":1,"citizenPid":"100000010801","citizenPidStatus":1,"identifyNumber":"123321123","lastNameSrch":"TRUNG","middleName":"VĂN","fullName":"TRẦN
-                  VĂN
-                  TRUNG","fullNameSrch":"TRANVANTRUNG","birthDate":"19900101","gender":1,"ethnicId":"00","marriageStatus":"1","militaryDuty":"0","religionId":"00","hhName":"N/A","hhRelationshipId":"CH01","hhProfileFamilyResNumber":"1232434","fatherName":"ABC
-                  TEST","fatherPid":"001001001001","motherName":"ABC TEST
-                  1","motherPid":"001001002001","permanentCityId":"30","workAddress":"N/A","forename":"TRAN","absentType":1,"identifyApproveDate":"20190529","cleaningStatus":1}]}
-              variable: message.body
-              content: application/json
-          outputs:
-            output:
-              schema:
-                type: object
-                properties:
-                  Envelope:
-                    type: object
-                    properties:
-                      Header:
-                        type: object
-                        name: Header
-                      Body:
-                        type: object
-                        properties:
-                          CongdanCollection:
-                            type: object
-                            properties:
-                              CongDan:
-                                type: object
-                                properties:
-                                  SoDinhDanh:
-                                    type: string
-                                    name: SoDinhDanh
-                                  SoCMND:
-                                    type: string
-                                    name: SoCMND
-                                  HoVaTen:
-                                    type: object
-                                    properties:
-                                      Ho:
-                                        type: object
-                                        name: Ho
-                                      ChuDem:
-                                        type: object
-                                        name: ChuDem
-                                      Ten:
-                                        type: string
-                                        name: Ten
-                                    name: HoVaTen
-                                  GioiTinh:
-                                    type: string
-                                    name: GioiTinh
-                                  DanToc:
-                                    type: string
-                                    name: DanToc
-                                  TonGiao:
-                                    type: string
-                                    name: TonGiao
-                                  TinhTrangHonNhan:
-                                    type: string
-                                    name: TinhTrangHonNhan
-                                  NhomMau:
-                                    type: object
-                                    name: NhomMau
-                                  NgayThangNamSinh:
-                                    type: object
-                                    properties:
-                                      Nam:
-                                        type: object
-                                        name: Nam
-                                      NgayThangNam:
-                                        type: string
-                                        name: NgayThangNam
-                                    name: NgayThangNamSinh
-                                  NoiDangKyKhaiSinh:
-                                    type: object
-                                    properties:
-                                      MaTinhThanh:
-                                        type: object
-                                        name: MaTinhThanh
-                                      MaQuanHuyen:
-                                        type: object
-                                        name: MaQuanHuyen
-                                      MaPhuongXa:
-                                        type: object
-                                        name: MaPhuongXa
-                                      ChiTiet:
-                                        type: object
-                                        name: ChiTiet
-                                      QuocGia:
-                                        type: object
-                                        name: QuocGia
-                                    name: NoiDangKyKhaiSinh
-                                  QuocTich:
-                                    type: object
-                                    name: QuocTich
-                                  QueQuan:
-                                    type: object
-                                    properties:
-                                      MaTinhThanh:
-                                        type: object
-                                        name: MaTinhThanh
-                                      MaQuanHuyen:
-                                        type: object
-                                        name: MaQuanHuyen
-                                      MaPhuongXa:
-                                        type: object
-                                        name: MaPhuongXa
-                                      ChiTiet:
-                                        type: object
-                                        name: ChiTiet
-                                      QuocGia:
-                                        type: object
-                                        name: QuocGia
-                                    name: QueQuan
-                                  ThuongTru:
-                                    type: object
-                                    properties:
-                                      MaTinhThanh:
-                                        type: object
-                                        name: MaTinhThanh
-                                      MaQuanHuyen:
-                                        type: object
-                                        name: MaQuanHuyen
-                                      MaPhuongXa:
-                                        type: object
-                                        name: MaPhuongXa
-                                      ChiTiet:
-                                        type: object
-                                        name: ChiTiet
-                                      QuocGia:
-                                        type: object
-                                        name: QuocGia
-                                    name: ThuongTru
-                                  NoiOHienTai:
-                                    type: object
-                                    properties:
-                                      MaTinhThanh:
-                                        type: object
-                                        name: MaTinhThanh
-                                      MaQuanHuyen:
-                                        type: object
-                                        name: MaQuanHuyen
-                                      MaPhuongXa:
-                                        type: object
-                                        name: MaPhuongXa
-                                      ChiTiet:
-                                        type: object
-                                        name: ChiTiet
-                                      QuocGia:
-                                        type: object
-                                        name: QuocGia
-                                    name: NoiOHienTai
-                                  Cha:
-                                    type: object
-                                    properties:
-                                      HoVaTen:
-                                        type: string
-                                        name: HoVaTen
-                                      QuocTich:
-                                        type: object
-                                        name: QuocTich
-                                      SoDinhDanh:
-                                        type: string
-                                        name: SoDinhDanh
-                                      SoCMND:
-                                        type: object
-                                        name: SoCMND
-                                    name: Cha
-                                  Me:
-                                    type: object
-                                    properties:
-                                      HoVaTen:
-                                        type: string
-                                        name: HoVaTen
-                                      QuocTich:
-                                        type: object
-                                        name: QuocTich
-                                      SoDinhDanh:
-                                        type: string
-                                        name: SoDinhDanh
-                                      SoCMND:
-                                        type: object
-                                        name: SoCMND
-                                    name: Me
-                                  VoChong:
-                                    type: object
-                                    properties:
-                                      HoVaTen:
-                                        type: object
-                                        name: HoVaTen
-                                      QuocTich:
-                                        type: object
-                                        name: QuocTich
-                                      SoDinhDanh:
-                                        type: object
-                                        name: SoDinhDanh
-                                      SoCMND:
-                                        type: object
-                                        name: SoCMND
-                                    name: VoChong
-                                  NguoiDaiDien:
-                                    type: object
-                                    properties:
-                                      HoVaTen:
-                                        type: object
-                                        name: HoVaTen
-                                      QuocTich:
-                                        type: object
-                                        name: QuocTich
-                                      SoDinhDanh:
-                                        type: object
-                                        name: SoDinhDanh
-                                      SoCMND:
-                                        type: object
-                                        name: SoCMND
-                                    name: NguoiDaiDien
-                                  ChuHo:
-                                    type: object
-                                    properties:
-                                      QuanHe:
-                                        type: object
-                                        name: QuanHe
-                                      SoDinhDanh:
-                                        type: object
-                                        name: SoDinhDanh
-                                      SoCMND:
-                                        type: object
-                                        name: SoCMND
-                                      HoVaTen:
-                                        type: string
-                                        name: HoVaTen
-                                    name: ChuHo
-                                  SoSoHoKhau:
-                                    type: object
-                                    name: SoSoHoKhau
-                                name: CongDan
-                            xml:
-                              namespace: http://www.mic.gov.vn/dancu/1.0
-                              prefix: ns1
-                            name: CongdanCollection
-                        name: Body
-                    xml:
-                      namespace: http://schemas.xmlsoap.org/soap/envelope/
-                      prefix: soapenv
-                    name: Envelope
-                xml:
-                  namespace: ''
-                example: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n    <soapenv:Header xmlns:dan=\"http://dancuquocgia.bca\"/>\r\n    <soapenv:Body xmlns:dan=\"http://dancuquocgia.bca\">\r\n        <ns1:CongdanCollection xmlns:ns1=\"http://www.mic.gov.vn/dancu/1.0\">\r\n            <ns1:CongDan>\r\n                <ns1:SoDinhDanh>100000010801</ns1:SoDinhDanh>\r\n                <ns1:SoCMND>123321123</ns1:SoCMND>\r\n                <ns1:HoVaTen>\r\n                    <ns1:Ho/>\r\n                    <ns1:ChuDem/>\r\n                    <ns1:Ten>TRẦN VĂN TRUNG</ns1:Ten>\r\n                </ns1:HoVaTen>\r\n                <ns1:GioiTinh>1</ns1:GioiTinh>\r\n                <ns1:DanToc>00</ns1:DanToc>\r\n                <ns1:TonGiao>00</ns1:TonGiao>\r\n                <ns1:TinhTrangHonNhan>1</ns1:TinhTrangHonNhan>\r\n                <ns1:NhomMau/>\r\n                <ns1:NgayThangNamSinh>\r\n                    <ns1:Nam/>\r\n                    <ns1:NgayThangNam>19900101</ns1:NgayThangNam>\r\n                </ns1:NgayThangNamSinh>\r\n                <ns1:NoiDangKyKhaiSinh>\r\n                    <ns1:MaTinhThanh/>\r\n                    <ns1:MaQuanHuyen/>\r\n                    <ns1:MaPhuongXa/>\r\n                    <ns1:ChiTiet/>\r\n                    <ns1:QuocGia/>\r\n                </ns1:NoiDangKyKhaiSinh>\r\n                <ns1:QuocTich/>\r\n                <ns1:QueQuan>\r\n                    <ns1:MaTinhThanh/>\r\n                    <ns1:MaQuanHuyen/>\r\n                    <ns1:MaPhuongXa/>\r\n                    <ns1:ChiTiet/>\r\n                    <ns1:QuocGia/>\r\n                </ns1:QueQuan>\r\n                <ns1:ThuongTru>\r\n                    <ns1:MaTinhThanh/>\r\n                    <ns1:MaQuanHuyen/>\r\n                    <ns1:MaPhuongXa/>\r\n                    <ns1:ChiTiet/>\r\n                    <ns1:QuocGia/>\r\n                </ns1:ThuongTru>\r\n                <ns1:NoiOHienTai>\r\n                    <ns1:MaTinhThanh/>\r\n                    <ns1:MaQuanHuyen/>\r\n                    <ns1:MaPhuongXa/>\r\n                    <ns1:ChiTiet/>\r\n                    <ns1:QuocGia/>\r\n                </ns1:NoiOHienTai>\r\n                <ns1:Cha>\r\n                    <ns1:HoVaTen>ABC TEST</ns1:HoVaTen>\r\n                    <ns1:QuocTich/>\r\n                    <ns1:SoDinhDanh>001001001001</ns1:SoDinhDanh>\r\n                    <ns1:SoCMND/>\r\n                </ns1:Cha>\r\n                <ns1:Me>\r\n                    <ns1:HoVaTen>ABC TEST 1</ns1:HoVaTen>\r\n                    <ns1:QuocTich/>\r\n                    <ns1:SoDinhDanh>001001002001</ns1:SoDinhDanh>\r\n                    <ns1:SoCMND/>\r\n                </ns1:Me>\r\n                <ns1:VoChong>\r\n                    <ns1:HoVaTen/>\r\n                    <ns1:QuocTich/>\r\n                    <ns1:SoDinhDanh/>\r\n                    <ns1:SoCMND/>\r\n                </ns1:VoChong>\r\n                <ns1:NguoiDaiDien>\r\n                    <ns1:HoVaTen/>\r\n                    <ns1:QuocTich/>\r\n                    <ns1:SoDinhDanh/>\r\n                    <ns1:SoCMND/>\r\n                </ns1:NguoiDaiDien>\r\n                <ns1:ChuHo>\r\n                    <ns1:QuanHe/>\r\n                    <ns1:SoDinhDanh/>\r\n                    <ns1:SoCMND/>\r\n                    <ns1:HoVaTen>N/A</ns1:HoVaTen>\r\n                </ns1:ChuHo>\r\n                <ns1:SoSoHoKhau/>\r\n            </ns1:CongDan>\r\n        </ns1:CongdanCollection>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>"
-              variable: message.body
-              content: application/xml
-          actions:
-            - set: output.Envelope.Body.CongdanCollection.CongDan.SoDinhDanh
-              from: input.responseData.citizenPid
-            - set: output.Envelope.Body.CongdanCollection.CongDan.SoCMND
-              from: input.responseData.identifyNumber
-            - set: output.Envelope.Body.CongdanCollection.CongDan.HoVaTen.Ten
-              from: input.responseData.fullName
-            - set: >-
-                output.Envelope.Body.CongdanCollection.CongDan.NgayThangNamSinh.NgayThangNam
-              from: input.responseData.birthDate
-            - set: output.Envelope.Body.CongdanCollection.CongDan.GioiTinh
-              from: input.responseData.gender
-            - set: output.Envelope.Body.CongdanCollection.CongDan.DanToc
-              from: input.responseData.ethnicId
-            - set: output.Envelope.Body.CongdanCollection.CongDan.TonGiao
-              from: input.responseData.religionId
-            - set: output.Envelope.Body.CongdanCollection.CongDan.TinhTrangHonNhan
-              from: input.responseData.marriageStatus
-            - set: output.Envelope.Body.CongdanCollection.CongDan.Cha.HoVaTen
-              from: input.responseData.fatherName
-            - set: output.Envelope.Body.CongdanCollection.CongDan.Cha.SoDinhDanh
-              from: input.responseData.fatherPid
-            - set: output.Envelope.Body.CongdanCollection.CongDan.Me.HoVaTen
-              from: input.responseData.motherName
-            - set: output.Envelope.Body.CongdanCollection.CongDan.Me.SoDinhDanh
-              from: input.responseData.motherPid
+          title: Switch Based on MaDichVu
+          case:
+            - condition: $.Envelope.Body.Request.*.MaDichVu = '033'
+              execute:
+                - invoke:
+                    title: Call Backend API 033
+                    version: 2.0.0
+                    verb: POST
+                    target-url: >-
+                      https://184cd94f-41db-49d5-a14c-acc1583a0054.mock.pstmn.io/033
+                    header-control:
+                      type: blocklist
+                      values: []
+                    parameter-control:
+                      type: blocklist
+                      values: []
+                    persistent-connection: true
+            - condition: $.Envelope.Body.Request.*.MaDichVu = '034'
+              execute:
+                - invoke:
+                    title: Call Backend API 034
+                    version: 2.0.0
+                    verb: POST
+                    target-url: >-
+                      https://184cd94f-41db-49d5-a14c-acc1583a0054.mock.pstmn.io/034
+                    header-control:
+                      type: blocklist
+                      values: []
+                    parameter-control:
+                      type: blocklist
+                      values: []
+                    persistent-connection: true
+            - condition: $.Envelope.Body.Request.*.MaDichVu = '037'
+              execute:
+                - invoke:
+                    title: Call Backend API 037
+                    version: 2.0.0
+                    verb: POST
+                    target-url: >-
+                      https://184cd94f-41db-49d5-a14c-acc1583a0054.mock.pstmn.io/037
+                    header-control:
+                      type: blocklist
+                      values: []
+                    parameter-control:
+                      type: blocklist
+                      values: []
+                    persistent-connection: true
+          default:
+            - raise-fault:
+                title: Invalid MaDichVu Fault
+                fault:
+                  code: '400'
+                  reason: Invalid MaDichVu
+                  message: The MaDichVu value provided is not supported
     finally: []
     catch: []
   x-ibm-apiconnect-wsdl:
@@ -596,6 +113,13 @@ x-ibm-configuration:
           info: []
           warning: []
           error: []
+        previous:
+          package-version: 2.0.36
+          options: {}
+          messages:
+            info: []
+            warning: []
+            error: []
   activity-log:
     enabled: true
     success-content: activity
